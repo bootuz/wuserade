@@ -80,7 +80,7 @@ class Poem(models.Model):
         (HUMOR, 'Гушыӏэ'),
     ]
 
-    title = models.CharField(max_length=250, verbose_name='Title')
+    title = models.CharField(max_length=250, verbose_name='Title', db_index=True)
     slug = models.SlugField(unique=True, verbose_name='Slug')
     author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Author')
     text = models.TextField(verbose_name='Poem\'s text')
