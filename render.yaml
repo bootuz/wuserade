@@ -1,6 +1,6 @@
 databases:
   - name: wuserade-prod
-    databaseName: wuserade
+    databaseName: wuserade_qpq6
     user: admin
 
 services:
