@@ -2,10 +2,12 @@ databases:
   - name: wuserade-prod
     databaseName: wuserade_qpq6
     user: admin
+    region: frankfurt
 
 services:
   - type: web
     name: wuserade
+    region: frankfurt
     runtime: python
     buildCommand: "./build.sh"
     startCommand: "gunicorn mysite.wsgi:application"
