@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+from dj_database_url import config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -76,11 +78,10 @@ WSGI_APPLICATION = 'wuserade.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': config(default="postgres://admin:lQBtjMzGeZiH50KXharyVVdc6IFXQTaX@dpg-cn5rquuct0pc738if0v0-a.frankfurt-postgres.render.com/wuserade_qpq6", conn_max_age=600)
 }
+# pg_restore --verbose --clean --no-acl --no-owner -h localhost -U username -d new_database_name backup_file.dump
+
 
 
 # Password validation
