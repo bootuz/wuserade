@@ -1,0 +1,119 @@
+[
+  {
+    "model": "poems.theme",
+    "pk": 1,
+    "fields": {
+      "title": "Хэкум теухуауэ",
+      "slug": "hekum-teuhuaue",
+      "views": 0
+    }
+  },
+  {
+    "model": "poems.theme",
+    "pk": 2,
+    "fields": {
+      "title": "Адэ-Анэм теухуауэ",
+      "slug": "ade-anem-teuhuaue",
+      "views": 0
+    }
+  },
+  {
+    "model": "poems.theme",
+    "pk": 4,
+    "fields": {
+      "title": "Адыгэм теухуауэ",
+      "slug": "adygem-teuhuaue",
+      "views": 0
+    }
+  },
+  {
+    "model": "poems.theme",
+    "pk": 5,
+    "fields": {
+      "title": "Ныбжьэгъугъэм теухуауэ",
+      "slug": "nybzhegugem-teuhuaue",
+      "views": 0
+    }
+  },
+  {
+    "model": "poems.theme",
+    "pk": 7,
+    "fields": {
+      "title": "Щӏыуэпсым теухуауэ",
+      "slug": "shyuepsym-teuhuaue",
+      "views": 0
+    }
+  },
+  {
+    "model": "poems.theme",
+    "pk": 10,
+    "fields": {
+      "title": "Гъэ лъэхъэнэхэм теухуа усэхэр",
+      "slug": "ge-lehenehem-teuhua-useher",
+      "views": 0
+    }
+  },
+  {
+    "model": "poems.theme",
+    "pk": 12,
+    "fields": {
+      "title": "Гушыӏэ усэхэр",
+      "slug": "gushye-useher",
+      "views": 0
+    }
+  },
+  {
+    "model": "poems.theme",
+    "pk": 3,
+    "fields": {
+      "title": "Лъагъуныгъэм теухуа усэхэр",
+      "slug": "love",
+      "views": 0
+    }
+  },
+  {
+    "model": "poems.theme",
+    "pk": 13,
+    "fields": {
+      "title": "Фэеплъ усэхэр",
+      "slug": "feepl-useher",
+      "views": 0
+    }
+  },
+  {
+    "model": "poems.theme",
+    "pk": 11,
+    "fields": {
+      "title": "Зауэм теухуа усэхэр",
+      "slug": "war",
+      "views": 0
+    }
+  },
+  {
+    "model": "poems.theme",
+    "pk": 9,
+    "fields": {
+      "title": "Псэущхьэхэм теухуа усэхэр",
+      "slug": "animals",
+      "views": 0
+    }
+  },
+  {
+    "model": "poems.theme",
+    "pk": 8,
+    "fields": {
+      "title": "Цӏыкӏухэм папщӏэ усэхэр",
+      "slug": "kids",
+      "views": 0
+    }
+  },
+  {
+    "model": "poems.theme",
+    "pk": 6,
+    "fields": {
+      "title": "Гъащӏэм теухуа усэхэр",
+      "slug": "life",
+      "views": 0
+    }
+  }
+]
