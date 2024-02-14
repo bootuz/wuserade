@@ -1,5 +1,5 @@
 databases:
-  - name: wuserade_prod
+  - name: wuserade-prod
     databaseName: wuserade_qpq6
     user: admin
 
