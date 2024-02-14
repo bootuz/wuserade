@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 from dj_database_url import config
@@ -17,16 +17,21 @@ from dj_database_url import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3!!=*vkksrl2f07x9a2x7stg+^hrh7nzo_85j68uwt##fad^g%'
+SECRET_KEY = os.getenv("SECRET_KEY", "you_never_guess")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
+
+RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -77,7 +82,7 @@ WSGI_APPLICATION = 'wuserade.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': config(default="postgres://admin:lQBtjMzGeZiH50KXharyVVdc6IFXQTaX@dpg-cn5rquuct0pc738if0v0-a.frankfurt-postgres.render.com/wuserade_qpq6", conn_max_age=600)
+    'default': config(default=os.getenv("DATABASE_URL"), conn_max_age=600)
 }
 # pg_restore --verbose --clean --no-acl --no-owner -h localhost -U username -d new_database_name backup_file.dump
 
