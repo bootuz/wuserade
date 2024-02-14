@@ -10,7 +10,7 @@ services:
     region: frankfurt
     runtime: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn mysite.wsgi:application"
+    startCommand: "gunicorn wuserade.wsgi:application"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.7
