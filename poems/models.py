@@ -87,7 +87,7 @@ class Poem(models.Model):
     theme = models.CharField(max_length=100, choices=THEMES, blank=True)
     category = models.ForeignKey(Theme, null=True, on_delete=models.CASCADE, verbose_name='Category')
     views = models.PositiveIntegerField(default=0, verbose_name='Views')
-    created_at = models.DateTimeField(editable=False, verbose_name='Date published')
+    created_at = models.DateTimeField(editable=False, verbose_name='Date published', db_index=True)
     updated_at = models.DateTimeField()
 
     class Meta:
