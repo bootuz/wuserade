@@ -101,7 +101,7 @@ def get_latest_poems(request):
 
 
 def get_authors(request):
-    authors = Author.objects.all().order_by('name').distinct()
+    authors = Author.objects.all()
     page = request.GET.get('page', 1)
     paginator = Paginator(authors, 20)
 
