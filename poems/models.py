@@ -82,7 +82,7 @@ class Poem(models.Model):
 
     title = models.CharField(max_length=250, verbose_name='Title', db_index=True)
     slug = models.SlugField(unique=True, verbose_name='Slug')
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Author')
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Author', related_name='poems')
     text = models.TextField(verbose_name='Poem\'s text')
     theme = models.CharField(max_length=100, choices=THEMES, blank=True)
     category = models.ForeignKey(Theme, null=True, on_delete=models.CASCADE, verbose_name='Category')
