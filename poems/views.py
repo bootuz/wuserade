@@ -101,7 +101,7 @@ def get_latest_poems(request):
 
 
 def get_authors(request):
-    authors = Author.objects.all().order_by('name')
+    authors = Author.objects.all().order_by('name').distinct()
     page = request.GET.get('page', 1)
     paginator = Paginator(authors, 20)
 
@@ -138,7 +138,7 @@ def get_author(request, pk):
         return JsonResponse(author_data, safe=False)
     except ObjectDoesNotExist:
         return JsonResponse(
-            {'error': 'Author does not exist'},
+            data={'error': 'Author does not exist'},
             safe=False,
             status=HTTPStatus.NOT_FOUND
         )
@@ -146,7 +146,6 @@ def get_author(request, pk):
 
 def get_poems_of_author(request, pk):
     try:
-        author = Author.objects.get(id=pk)
         poems = Poem.objects.filter(author_id=pk)
         page = request.GET.get('page', 1)
         paginator = Paginator(poems, 20)
@@ -162,8 +161,8 @@ def get_poems_of_author(request, pk):
                 'id': poem.id,
                 'title': poem.title,
                 'author': {
-                    "id": author.id,
-                    "name": author.name,
+                    "id": poem.author.id,
+                    "name": poem.author.name,
                 },
                 'content': poem.text
             } for poem in poems
@@ -172,7 +171,7 @@ def get_poems_of_author(request, pk):
         return JsonResponse(poems_data, safe=False)
     except ObjectDoesNotExist:
         return JsonResponse(
-            {'error': 'Author does not exist'},
+            data={'error': 'Author does not exist'},
             safe=False,
             status=HTTPStatus.NOT_FOUND
         )
