@@ -11,7 +11,7 @@ from poems.models import Poem, Author
 
 
 def index(request):
-    poems = Poem.objects.all().order_by('?')
+    poems = Poem.objects.all().order_by('?').distinct()
     page = request.GET.get('page', 1)
     paginator = Paginator(poems, 20)
 
