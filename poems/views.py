@@ -68,7 +68,7 @@ def get_poem(request, pk):
 def search_poems(request):
     query = request.GET.get("q")
     poems = Poem.objects.filter(
-            Q(title__icontains=query) | Q(authors__name__icontains=query)
+            Q(title__icontains=query) | Q(author__name__icontains=query)
         ).distinct()
     poems_data = [
         {
