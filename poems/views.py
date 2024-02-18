@@ -11,7 +11,7 @@ from poems.models import Poem, Author
 
 
 def index(request):
-    poems = Poem.objects.all().order_by('?').distinct()
+    poems = Poem.objects.all().order_by('title')
     page = request.GET.get('page', 1)
     paginator = Paginator(poems, 20)
 
@@ -101,17 +101,20 @@ def get_latest_poems(request):
 
 
 def get_authors(request):
-    authors = Author.objects.all()
+    authors = Author.objects.all().order_by("name")
     page = request.GET.get('page', 1)
     paginator = Paginator(authors, 20)
 
     try:
         authors = paginator.page(page)
+        for author in authors:
+            print(author.name)
     except PageNotAnInteger:
         authors = paginator.page(1)
     except EmptyPage:
         authors = paginator.page(paginator.num_pages)
 
+    print(paginator.num_pages)
     author_data = [
         {
             "id": author.id,
