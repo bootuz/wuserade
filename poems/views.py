@@ -11,7 +11,7 @@ from poems.models import Poem, Author
 
 
 def index(request):
-    poems = Poem.objects.all().order_by('title')
+    poems = Poem.objects.all().order_by('-created_at')
     page = request.GET.get('page', 1)
     paginator = Paginator(poems, 20)
 
@@ -148,33 +148,16 @@ def get_author(request, pk):
 
 
 def get_poems_of_author(request, pk):
-    try:
-        poems = Poem.objects.filter(author_id=pk)
-        page = request.GET.get('page', 1)
-        paginator = Paginator(poems, 20)
-        try:
-            poems = paginator.page(page)
-        except PageNotAnInteger:
-            poems = paginator.page(1)
-        except EmptyPage:
-            poems = paginator.page(paginator.num_pages)
-
-        poems_data = [
-            {
-                'id': poem.id,
-                'title': poem.title,
-                'author': {
-                    "id": poem.author.id,
-                    "name": poem.author.name,
-                },
-                'content': poem.text
-            } for poem in poems
-        ]
-
-        return JsonResponse(poems_data, safe=False)
-    except ObjectDoesNotExist:
-        return JsonResponse(
-            data={'error': 'Author does not exist'},
-            safe=False,
-            status=HTTPStatus.NOT_FOUND
-        )
+    poems = Poem.objects.filter(author_id=pk)
+    poems_data = [
+        {
+            'id': poem.id,
+            'title': poem.title,
+            'author': {
+                "id": poem.author.id,
+                "name": poem.author.name,
+            },
+            'content': poem.text
+        } for poem in poems
+    ]
+    return JsonResponse(poems_data, safe=False)
