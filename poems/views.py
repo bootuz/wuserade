@@ -176,15 +176,6 @@ def get_themes(request):
 
 def get_poems_by_theme(request, pk):
     poems = Poem.objects.filter(category_id=pk)
-    page = request.GET.get('page', 1)
-    paginator = Paginator(poems, 20)
-
-    try:
-        poems = paginator.page(page)
-    except PageNotAnInteger:
-        poems = paginator.page(1)
-    except EmptyPage:
-        poems = paginator.page(paginator.num_pages)
     poems_data = [
         {
             'id': poem.id,
