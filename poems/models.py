@@ -85,8 +85,9 @@ class Poem(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Author', related_name='poems')
     text = models.TextField(verbose_name='Poem\'s text')
     theme = models.CharField(max_length=100, choices=THEMES, blank=True)
-    category = models.ForeignKey(Theme, null=True, on_delete=models.CASCADE, verbose_name='Category')
+    category = models.ForeignKey(Theme, null=True, on_delete=models.CASCADE, verbose_name='Category', related_name='poems')
     views = models.PositiveIntegerField(default=0, verbose_name='Views')
+    likes = models.PositiveIntegerField(default=0, verbose_name='Likes', editable=False)
     created_at = models.DateTimeField(editable=False, verbose_name='Date published', db_index=True)
     updated_at = models.DateTimeField()
 

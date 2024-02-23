@@ -7,7 +7,7 @@ from django.db.models import Q
 # Create your views here.
 from django.http import JsonResponse
 
-from poems.models import Poem, Author
+from poems.models import Poem, Author, Theme
 
 
 def index(request):
@@ -149,6 +149,42 @@ def get_author(request, pk):
 
 def get_poems_of_author(request, pk):
     poems = Poem.objects.filter(author_id=pk)
+    poems_data = [
+        {
+            'id': poem.id,
+            'title': poem.title,
+            'author': {
+                "id": poem.author.id,
+                "name": poem.author.name,
+            },
+            'content': poem.text
+        } for poem in poems
+    ]
+    return JsonResponse(poems_data, safe=False)
+
+
+def get_themes(request):
+    themes = Theme.objects.all()
+    theme_data = [
+        {
+            "id": theme.id,
+            "title": theme.title,
+        } for theme in themes
+    ]
+    return JsonResponse(theme_data, safe=False)
+
+
+def get_poems_by_theme(request, pk):
+    poems = Poem.objects.filter(category_id=pk)
+    page = request.GET.get('page', 1)
+    paginator = Paginator(poems, 20)
+
+    try:
+        poems = paginator.page(page)
+    except PageNotAnInteger:
+        poems = paginator.page(1)
+    except EmptyPage:
+        poems = paginator.page(paginator.num_pages)
     poems_data = [
         {
             'id': poem.id,

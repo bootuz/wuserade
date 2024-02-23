@@ -6,7 +6,9 @@ from .views import (
     get_authors,
     get_author,
     get_poems_of_author,
-    search_poems
+    search_poems,
+    get_themes,
+    get_poems_by_theme
 )
 
 urlpatterns = [
@@ -16,6 +18,8 @@ urlpatterns = [
     path('authors/', get_authors, name='authors_list'),
     path('authors/<int:pk>/', get_author, name='author'),
     path('authors/<int:pk>/poems', get_poems_of_author, name='get_poems_of_author'),
-    path('poems/search/', search_poems, name='search_poems')
+    path('poems/search/', search_poems, name='search_poems'),
+    path('themes/', get_themes, name='themes_list'),
+    path('themes/<int:pk>/poems', get_poems_by_theme, name='poems_by_theme')
 ]
 
