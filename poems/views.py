@@ -128,6 +128,18 @@ def get_authors(request):
     )
 
 
+def get_authors_v2(request):
+    authors = Author.objects.annotate(poems_count=Count('poems')).filter(poems_count__gt=0).order_by('name')
+
+    author_data = [
+        {
+            "id": author.id,
+            "name": author.name,
+        } for author in authors
+    ]
+    return JsonResponse(author_data, safe=False)
+
+
 def get_author(request, pk):
     try:
         author = Author.objects.get(id=pk)
