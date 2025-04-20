@@ -26,7 +26,7 @@ class PoemSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Poem
-        fields = ['id', 'title', 'author', 'text', 'theme', 'created_at']
+        fields = ['id', 'title', 'author', 'text', 'category', 'created_at']
 
     def get_content(self, obj):
         return obj.text
