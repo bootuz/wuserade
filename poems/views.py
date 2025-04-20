@@ -145,7 +145,7 @@ def get_author(request, pk):
         author = Author.objects.get(id=pk)
         author_data = {
             'id': author.id,
-            'name': author.title,
+            'name': author.name,
         }
         return JsonResponse(author_data, safe=False)
     except ObjectDoesNotExist:
