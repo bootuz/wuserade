@@ -22,10 +22,11 @@ class ThemeSerializer(serializers.ModelSerializer):
 
 class PoemSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
+    theme = ThemeSerializer(read_only=True)
     
     class Meta:
         model = Poem
-        fields = ['id', 'title', 'author', 'text', 'created_at']
+        fields = ['id', 'title', 'author', 'text', 'theme', 'created_at']
 
     def get_content(self, obj):
         return obj.text

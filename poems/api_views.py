@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
@@ -15,7 +16,7 @@ from .serializers import (
 
 
 class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 19
+    page_size = 21
     page_query_param = 'page'
     page_size_query_param = 'page_size'
     max_page_size = 100
@@ -42,7 +43,7 @@ def poem_detail(request, pk):
         poem = Poem.objects.get(id=pk)
         serializer = PoemDetailSerializer(poem)
         return Response(serializer.data)
-    except Poem.DoesNotExist:
+    except ObjectDoesNotExist:
         return Response(
             {'error': 'Poem does not exist'},
             status=status.HTTP_404_NOT_FOUND
@@ -72,7 +73,7 @@ def search_poems(request):
 @api_view(['GET'])
 def latest_poems(request):
     """
-    Get the 10 latest poems
+    Get the 9 latest poems
     """
     latest_poems = Poem.objects.all().order_by('-created_at')[:9]
     serializer = PoemSerializer(latest_poems, many=True)
