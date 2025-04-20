@@ -82,16 +82,14 @@ def latest_poems(request):
 @api_view(['GET'])
 def author_list(request):
     """
-    List all authors with at least one poem, with pagination
+    List all authors with at least one poem
     """
-    paginator = StandardResultsSetPagination()
     authors = Author.objects.annotate(
         poems_count=Count('poems')
     ).filter(poems_count__gt=0).order_by('name')
     
-    result_page = paginator.paginate_queryset(authors, request)
-    serializer = AuthorSerializer(result_page, many=True)
-    return paginator.get_paginated_response(serializer.data)
+    serializer = AuthorSerializer(authors, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
