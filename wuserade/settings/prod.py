@@ -139,6 +139,24 @@ MEDIA_ROOT = BASE_DIR / "media/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
 CORS_ALLOWED_ORIGINS = [
     "https://wuserade-front.onrender.com",
 ]
