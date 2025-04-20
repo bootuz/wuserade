@@ -20,6 +20,7 @@ from django.urls import path, include
 urlpatterns = [
     path("", include("poems.urls")),
     path("admin/", admin.site.urls),
+    path("api/v1/", include("poems.api_urls")),
 ]
 
 admin.site.site_header = "Wuserade administration"
