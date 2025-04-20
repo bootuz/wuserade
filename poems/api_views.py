@@ -15,7 +15,7 @@ from .serializers import (
 
 
 class StandardResultsSetPagination(PageNumberPagination):
-    page_size = 20
+    page_size = 19
     page_query_param = 'page'
     page_size_query_param = 'page_size'
     max_page_size = 100
@@ -74,7 +74,7 @@ def latest_poems(request):
     """
     Get the 10 latest poems
     """
-    latest_poems = Poem.objects.all().order_by('-created_at')[:10]
+    latest_poems = Poem.objects.all().order_by('-created_at')[:9]
     serializer = PoemSerializer(latest_poems, many=True)
     return Response(serializer.data)
 
