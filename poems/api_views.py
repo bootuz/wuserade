@@ -93,36 +93,67 @@ def author_list(request):
     return Response(serializer.data)
 
 
+from django.db.models import Count
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+from .models import Author
+from .serializers import AuthorDetailSerializer
+
+
+# ... other views ...
+
 @api_view(['GET'])
 def author_detail(request, pk):
     """
-    Retrieve a specific author by ID with poem count
+    Retrieve a specific author by ID with poem count, incrementing view count once per session.
     """
     try:
+        # Retrieve the author
         author = Author.objects.annotate(
-            poems_count=Count('poems')
+            poems_count=Count('poems')  # Annotate might be handled by serializer, but safe to keep
         ).get(id=pk)
 
-        # Get or initialize viewed_authors as a set
+        # --- Session Logic Start ---
+
+        # Get the set of viewed author IDs from the session, default to an empty set
+        # Using a set is efficient for checking membership
         viewed_authors = set(request.session.get('viewed_authors', []))
 
-        # Check if an author hasn't been viewed in this session
-        if str(pk) not in viewed_authors:
+        # Convert pk to string for consistent storage and comparison in session
+        author_id_str = str(pk)
+
+        # Check if this author ID has *not* been viewed in the current session
+        if author_id_str not in viewed_authors:
+            # Increment the view count in the database
             author.views += 1
-            author.save()
+            author.save(update_fields=['views']) # Optimization: only update the 'views' field
 
-            # Add to viewed set and update session
-            viewed_authors.add(str(pk))
+            # Add the author ID to the set of viewed authors for this session
+            viewed_authors.add(author_id_str)
+
+            # Update the session data (convert set back to list for JSON serialization)
             request.session['viewed_authors'] = list(viewed_authors)
-            request.session.modified = True  # Force session save
 
+            # Explicitly mark the session as modified because we altered a mutable object (the list)
+            # This ensures Django saves the session
+            request.session.modified = True
+
+        # --- Session Logic End ---
+
+        # Serialize the author data (including the potentially updated view count)
         serializer = AuthorDetailSerializer(author)
         return Response(serializer.data)
-    except Author.DoesNotExist:
+
+    except ObjectDoesNotExist:
+        # Handle case where author is not found
         return Response(
             {'error': 'Author does not exist'},
             status=status.HTTP_404_NOT_FOUND
         )
+
+# ... other views ...
 
 
 @api_view(['GET'])
