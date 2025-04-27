@@ -103,10 +103,6 @@ def author_detail(request, pk):
             poems_count=Count('poems')
         ).get(id=pk)
 
-        # Ensure session exists
-        if not request.session.session_key:
-            request.session.create()
-
         # Get or initialize viewed_authors as a set
         viewed_authors = set(request.session.get('viewed_authors', []))
 

@@ -163,5 +163,6 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # Session settings
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 SESSION_COOKIE_AGE = 10800  # 3 hours
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Session persists even after a browser closes
