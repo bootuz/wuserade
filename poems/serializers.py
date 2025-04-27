@@ -3,15 +3,20 @@ from .models import Poem, Author, Theme
 
 
 class AuthorSerializer(serializers.ModelSerializer):
+    poems_count = serializers.IntegerField(read_only=True)
+    
     class Meta:
         model = Author
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'poems_count', 'views']
 
 
 class AuthorDetailSerializer(serializers.ModelSerializer):
+    poems_count = serializers.IntegerField(read_only=True)
+    
     class Meta:
         model = Author
-        fields = ['id', 'name', 'bio', 'photo', 'views', 'created_at']
+        fields = ['id', 'name', 'bio', 'photo', 'views', 'created_at', 'poems_count']
+
 
 
 class ThemeSerializer(serializers.ModelSerializer):

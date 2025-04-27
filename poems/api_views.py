@@ -83,7 +83,7 @@ def latest_poems(request):
 @api_view(['GET'])
 def author_list(request):
     """
-    List all authors with at least one poem
+    List all authors with at least one poem, including poem count
     """
     authors = Author.objects.annotate(
         poems_count=Count('poems')
@@ -96,10 +96,12 @@ def author_list(request):
 @api_view(['GET'])
 def author_detail(request, pk):
     """
-    Retrieve a specific author by ID
+    Retrieve a specific author by ID with poem count
     """
     try:
-        author = Author.objects.get(id=pk)
+        author = Author.objects.annotate(
+            poems_count=Count('poems')
+        ).get(id=pk)
         serializer = AuthorDetailSerializer(author)
         return Response(serializer.data)
     except Author.DoesNotExist:
