@@ -103,18 +103,26 @@ def author_detail(request, pk):
             poems_count=Count('poems')
         ).get(id=pk)
 
-        viewed_authors = request.session.get('viewed_authors', [])
+        # Ensure session exists
+        if not request.session.session_key:
+            request.session.create()
 
+        # Get or initialize viewed_authors as a set
+        viewed_authors = set(request.session.get('viewed_authors', []))
+
+        # Check if an author hasn't been viewed in this session
         if str(pk) not in viewed_authors:
             author.views += 1
             author.save()
 
-            viewed_authors.append(str(pk))
-            request.session['viewed_authors'] = viewed_authors
+            # Add to viewed set and update session
+            viewed_authors.add(str(pk))
+            request.session['viewed_authors'] = list(viewed_authors)
+            request.session.modified = True  # Force session save
 
         serializer = AuthorDetailSerializer(author)
         return Response(serializer.data)
-    except ObjectDoesNotExist:
+    except Author.DoesNotExist:
         return Response(
             {'error': 'Author does not exist'},
             status=status.HTTP_404_NOT_FOUND
