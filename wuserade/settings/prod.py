@@ -161,3 +161,7 @@ CORS_ALLOWED_ORIGINS = [
     "https://wuserade-front.onrender.com",
     "https://97fe2759-4cd1-4c90-9110-0ac7f7299b96.lovableproject.com"
 ]
+
+# Session settings
+SESSION_COOKIE_AGE = 10800  # 3 hours
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Session persists even after a browser closes

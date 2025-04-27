@@ -102,9 +102,19 @@ def author_detail(request, pk):
         author = Author.objects.annotate(
             poems_count=Count('poems')
         ).get(id=pk)
+
+        viewed_authors = request.session.get('viewed_authors', [])
+
+        if str(pk) not in viewed_authors:
+            author.views += 1
+            author.save()
+
+            viewed_authors.append(str(pk))
+            request.session['viewed_authors'] = viewed_authors
+
         serializer = AuthorDetailSerializer(author)
         return Response(serializer.data)
-    except Author.DoesNotExist:
+    except ObjectDoesNotExist:
         return Response(
             {'error': 'Author does not exist'},
             status=status.HTTP_404_NOT_FOUND

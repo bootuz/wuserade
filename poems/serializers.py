@@ -18,7 +18,6 @@ class AuthorDetailSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'bio', 'photo', 'views', 'created_at', 'poems_count']
 
 
-
 class ThemeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Theme
