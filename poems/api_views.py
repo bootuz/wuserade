@@ -93,17 +93,6 @@ def author_list(request):
     return Response(serializer.data)
 
 
-from django.db.models import Count
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-
-from .models import Author
-from .serializers import AuthorDetailSerializer
-
-
-# ... other views ...
-
 @api_view(['GET'])
 def author_detail(request, pk):
     """
@@ -123,12 +112,11 @@ def author_detail(request, pk):
 
         # Convert pk to string for consistent storage and comparison in session
         author_id_str = str(pk)
-
         # Check if this author ID has *not* been viewed in the current session
         if author_id_str not in viewed_authors:
             # Increment the view count in the database
             author.views += 1
-            author.save(update_fields=['views']) # Optimization: only update the 'views' field
+            author.save(update_fields=['views'])  # Optimization: only update the 'views' field
 
             # Add the author ID to the set of viewed authors for this session
             viewed_authors.add(author_id_str)
@@ -141,6 +129,7 @@ def author_detail(request, pk):
             request.session.modified = True
 
         # --- Session Logic End ---
+        print(f"Session ID: {request.session.session_key}, Viewed authors: {viewed_authors}")
 
         # Serialize the author data (including the potentially updated view count)
         serializer = AuthorDetailSerializer(author)
@@ -183,4 +172,4 @@ def theme_poems(request, pk):
     """
     poems = Poem.objects.filter(category_id=pk)
     serializer = PoemSerializer(poems, many=True)
-    return Response(serializer.data) 
+    return Response(serializer.data)
