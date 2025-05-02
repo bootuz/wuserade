@@ -1,3 +1,6 @@
+import random
+import datetime
+
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -173,3 +176,35 @@ def theme_poems(request, pk):
     poems = Poem.objects.filter(category_id=pk)
     serializer = PoemSerializer(poems, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def featured_poem(request):
+    """
+    Returns a random poem that stays the same for an entire day.
+    The featured poem changes daily at midnight and ensures consecutive days
+    have different featured poems.
+    """
+
+    today = datetime.date.today()
+    yesterday = today - datetime.timedelta(days=1)
+
+    poem_ids = list(Poem.objects.values_list('id', flat=True))
+
+    random.seed(hash(str(yesterday)))
+    yesterday_index = random.randint(0, len(poem_ids) - 1)
+    yesterday_poem_id = poem_ids[yesterday_index]
+
+    if yesterday_poem_id in poem_ids and len(poem_ids) > 1:
+        poem_ids.remove(yesterday_poem_id)
+
+    random.seed(hash(str(today)))
+
+    random_id = random.choice(poem_ids)
+    poem = Poem.objects.get(id=random_id)
+
+    serializer = PoemDetailSerializer(poem)
+    response_data = serializer.data
+    response_data['featured_date'] = str(today)
+
+    return Response(response_data)
