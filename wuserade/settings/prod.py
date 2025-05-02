@@ -27,7 +27,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "you_never_guess")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['wuserade.com', 'www.wuserade.com']
 
 RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")
 if RENDER_EXTERNAL_HOSTNAME:
