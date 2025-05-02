@@ -160,8 +160,9 @@ CORS_ALLOW_HEADERS = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "https://wuserade-front.onrender.com",
-    "https://97fe2759-4cd1-4c90-9110-0ac7f7299b96.lovableproject.com"
+    "https://97fe2759-4cd1-4c90-9110-0ac7f7299b96.lovableproject.com",
+    "https://wuserade.com",
+    "https://www.wuserade.com"
 ]
 
 # Session settings
