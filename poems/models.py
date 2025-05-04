@@ -110,3 +110,28 @@ class Poem(models.Model):
 
     def get_absolute_url(self):
         return reverse('poem', args=[self.slug])
+
+
+class FeaturedPoemManager(models.Manager):
+    def get_for_date(self, date):
+        """Get featured poem for a specific date, or None if not exists"""
+        return self.filter(featured_date=date).select_related('poem__author', 'poem__category').first()
+    
+    def get_latest(self):
+        """Get the most recently featured poem"""
+        return self.order_by('-featured_date').select_related('poem').first()
+
+
+class FeaturedPoem(models.Model):
+    poem = models.ForeignKey(Poem, on_delete=models.CASCADE, related_name='featured_dates')
+    featured_date = models.DateField(unique=True, db_index=True)
+    
+    objects = FeaturedPoemManager()
+    
+    class Meta:
+        ordering = ['-featured_date']
+        verbose_name = 'Featured Poem'
+        verbose_name_plural = 'Featured Poems'
+    
+    def __str__(self):
+        return f"{self.poem.title} - {self.featured_date.strftime('%Y-%m-%d')}"

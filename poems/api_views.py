@@ -1,6 +1,3 @@
-import random
-import datetime
-
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -14,8 +11,10 @@ from .serializers import (
     PoemDetailSerializer,
     AuthorSerializer,
     AuthorDetailSerializer,
-    ThemeSerializer
+    ThemeSerializer,
+    FeaturedPoemSerializer
 )
+from .services import FeaturedPoemService
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -65,10 +64,7 @@ def search_poems(request):
             status=status.HTTP_400_BAD_REQUEST
         )
         
-    poems = Poem.objects.filter(
-        Q(title__icontains=query) | Q(author__name__icontains=query)
-    ).distinct()
-    
+    poems = Poem.objects.filter(Q(title__icontains=query) | Q(author__name__icontains=query)).distinct()
     serializer = PoemSerializer(poems, many=True)
     return Response(serializer.data)
 
@@ -115,11 +111,12 @@ def author_detail(request, pk):
 
         # Convert pk to string for consistent storage and comparison in session
         author_id_str = str(pk)
+
         # Check if this author ID has *not* been viewed in the current session
         if author_id_str not in viewed_authors:
             # Increment the view count in the database
             author.views += 1
-            author.save(update_fields=['views'])  # Optimization: only update the 'views' field
+            author.save(update_fields=['views']) # Optimization: only update the 'views' field
 
             # Add the author ID to the set of viewed authors for this session
             viewed_authors.add(author_id_str)
@@ -132,7 +129,6 @@ def author_detail(request, pk):
             request.session.modified = True
 
         # --- Session Logic End ---
-        print(f"Session ID: {request.session.session_key}, Viewed authors: {viewed_authors}")
 
         # Serialize the author data (including the potentially updated view count)
         serializer = AuthorDetailSerializer(author)
@@ -144,8 +140,6 @@ def author_detail(request, pk):
             {'error': 'Author does not exist'},
             status=status.HTTP_404_NOT_FOUND
         )
-
-# ... other views ...
 
 
 @api_view(['GET'])
@@ -181,30 +175,11 @@ def theme_poems(request, pk):
 @api_view(['GET'])
 def featured_poem(request):
     """
-    Returns a random poem that stays the same for an entire day.
-    The featured poem changes daily at midnight and ensures consecutive days
-    have different featured poems.
+    Get the featured poem for today
     """
-
-    today = datetime.date.today()
-    yesterday = today - datetime.timedelta(days=1)
-
-    poem_ids = list(Poem.objects.values_list('id', flat=True))
-
-    random.seed(hash(str(yesterday)))
-    yesterday_index = random.randint(0, len(poem_ids) - 1)
-    yesterday_poem_id = poem_ids[yesterday_index]
-
-    if yesterday_poem_id in poem_ids and len(poem_ids) > 1:
-        poem_ids.remove(yesterday_poem_id)
-
-    random.seed(hash(str(today)))
-
-    random_id = random.choice(poem_ids)
-    poem = Poem.objects.get(id=random_id)
-
-    serializer = PoemDetailSerializer(poem)
-    response_data = serializer.data
-    response_data['featured_date'] = str(today)
-
-    return Response(response_data)
+    try:
+        featured = FeaturedPoemService.get_todays_featured_poem()
+        serializer = FeaturedPoemSerializer(featured)
+        return Response(serializer.data)
+    except ValueError as e:
+        return Response({'error': str(e)}, status=status.HTTP_404_NOT_FOUND)

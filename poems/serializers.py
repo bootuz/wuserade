@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Poem, Author, Theme
+from .models import Poem, Author, Theme, FeaturedPoem
 
 
 class AuthorSerializer(serializers.ModelSerializer):
@@ -47,3 +47,11 @@ class PoemDetailSerializer(serializers.ModelSerializer):
     
     def get_content(self, obj):
         return obj.text 
+
+
+class FeaturedPoemSerializer(serializers.ModelSerializer):
+    poem = PoemDetailSerializer(read_only=True)
+    
+    class Meta:
+        model = FeaturedPoem
+        fields = ['featured_date', 'poem'] 
