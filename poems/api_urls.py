@@ -11,4 +11,5 @@ urlpatterns = [
     path('authors/<int:pk>/poems/', api_views.author_poems, name='api_author_poems'),
     path('themes/', api_views.theme_list, name='api_themes_list'),
     path('themes/<int:pk>/poems/', api_views.theme_poems, name='api_theme_poems'),
+    path('poems/featured/', api_views.featured_poem, name='api_featured_poem'),
 ] 
