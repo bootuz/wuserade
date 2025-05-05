@@ -19,9 +19,11 @@ class AuthorDetailSerializer(serializers.ModelSerializer):
 
 
 class ThemeSerializer(serializers.ModelSerializer):
+    poems_count = serializers.IntegerField(read_only=True)
+    
     class Meta:
         model = Theme
-        fields = ['id', 'title']
+        fields = ['id', 'title', 'poems_count']
 
 
 class PoemSerializer(serializers.ModelSerializer):
@@ -54,4 +56,4 @@ class FeaturedPoemSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = FeaturedPoem
-        fields = ['featured_date', 'poem'] 
+        fields = ['featured_date', 'poem']

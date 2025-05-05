@@ -157,7 +157,7 @@ def theme_list(request):
     """
     List all themes
     """
-    themes = Theme.objects.all()
+    themes = Theme.objects.annotate(poems_count=Count('poems')).all()
     serializer = ThemeSerializer(themes, many=True)
     return Response(serializer.data)
 
